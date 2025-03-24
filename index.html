@@ -3,30 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asmita's Ultimate Challenge</title>
+    <title>Fun Game for Asmita</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background-color: #f8f8f8;
-            padding: 50px;
+            margin: 50px;
         }
-        .hidden { display: none; }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            margin: 10px;
-            cursor: pointer;
-            border: none;
-            background-color: #4CAF50;
-            color: white;
-            border-radius: 5px;
-        }
-        #runawayButton {
-            position: absolute;
-            transition: 0.3s ease-in-out;
-        }
-        #finalMessage {
+        #hiddenMessage {
+            display: none;
             font-size: 24px;
             font-weight: bold;
             color: red;
@@ -35,73 +20,42 @@
 </head>
 <body>
 
-    <h2>Asmita's Ultimate Challenge</h2>
-    <p>Complete these **super easy** tasks to unlock the final message!</p>
+    <h2>Welcome to a Fun Challenge!</h2>
+    <p>Follow the instructions carefully to reveal the secret message.</p>
 
-    <button id="task1">Click this 10 times</button>
-    <button id="task2" class="hidden">Solve: 12 + 8 - 5 = ?</button>
-    <button id="task3" class="hidden">Click me if you can!</button>
-    <button id="task4" class="hidden">Select the correct option:</button>
-
-    <div id="captcha" class="hidden">
-        <p>Which one proves you are not a bot?</p>
-        <button onclick="wrongAnswer()">I am Short</button>
-        <button onclick="correctAnswer()">I am Not Short</button>
+    <div id="mobileCheck">
+        <p>Are you using a mobile device?</p>
+        <button onclick="mobileMode(true)">Yes</button>
+        <button onclick="mobileMode(false)">No</button>
     </div>
 
-    <button id="task5" class="hidden">Final Step: Press "S" on your keyboard</button>
+    <p id="instruction" style="display:none;">Press <strong>S</strong> to continue.</p>
+    <button id="mobileButton" style="display:none;" onclick="revealMessage()">Click here to continue</button>
 
-    <p id="finalMessage" class="hidden">Asmita is short! 🤭</p>
+    <p id="hiddenMessage">Asmita is short! 😂</p>
 
     <script>
-        let clickCount = 0;
+        let isMobile = false;
 
-        document.getElementById("task1").addEventListener("click", function() {
-            clickCount++;
-            if (clickCount >= 10) {
-                this.classList.add("hidden");
-                document.getElementById("task2").classList.remove("hidden");
-            }
-        });
+        function mobileMode(mobile) {
+            isMobile = mobile;
+            document.getElementById("mobileCheck").style.display = "none";
 
-        document.getElementById("task2").addEventListener("click", function() {
-            let answer = prompt("Enter your answer:");
-            if (answer == "15") {
-                this.classList.add("hidden");
-                document.getElementById("task3").classList.remove("hidden");
+            if (isMobile) {
+                document.getElementById("mobileButton").style.display = "block";
             } else {
-                alert("Wrong! Try again.");
+                document.getElementById("instruction").style.display = "block";
+                document.addEventListener("keydown", function(event) {
+                    if (event.key.toLowerCase() === "s") {
+                        revealMessage();
+                    }
+                });
             }
-        });
-
-        let runawayButton = document.getElementById("task3");
-        runawayButton.addEventListener("mouseover", function() {
-            this.style.top = Math.random() * window.innerHeight + "px";
-            this.style.left = Math.random() * window.innerWidth + "px";
-        });
-
-        runawayButton.addEventListener("click", function() {
-            this.classList.add("hidden");
-            document.getElementById("task4").classList.remove("hidden");
-            document.getElementById("captcha").classList.remove("hidden");
-        });
-
-        function wrongAnswer() {
-            alert("Oops, wrong choice! Try again.");
         }
 
-        function correctAnswer() {
-            document.getElementById("captcha").classList.add("hidden");
-            document.getElementById("task4").classList.add("hidden");
-            document.getElementById("task5").classList.remove("hidden");
+        function revealMessage() {
+            document.getElementById("hiddenMessage").style.display = "block";
         }
-
-        document.addEventListener("keydown", function(event) {
-            if (event.key.toLowerCase() === "s") {
-                document.getElementById("task5").classList.add("hidden");
-                document.getElementById("finalMessage").classList.remove("hidden");
-            }
-        });
     </script>
 
 </body>
