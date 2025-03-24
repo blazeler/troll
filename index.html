@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asmita's Ultimate Challenge</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f8f8f8;
+            padding: 50px;
+        }
+        .hidden { display: none; }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+        }
+        #finalMessage {
+            font-size: 24px;
+            font-weight: bold;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Asmita's Ultimate Challenge</h2>
+    <p>Complete the tasks to unlock the final message!</p>
+
+    <button id="task1">Click this 5 times</button>
+    <button id="task2" class="hidden">Find the biggest number: 1, 5, 10, 3</button>
+    <button id="task3" class="hidden">Press "S" on your keyboard</button>
+    
+    <p id="finalMessage" class="hidden">Asmita is short! 🤭</p>
+
+    <script>
+        let clickCount = 0;
+
+        document.getElementById("task1").addEventListener("click", function() {
+            clickCount++;
+            if (clickCount >= 5) {
+                this.classList.add("hidden");
+                document.getElementById("task2").classList.remove("hidden");
+            }
+        });
+
+        document.getElementById("task2").addEventListener("click", function() {
+            let answer = prompt("Enter the biggest number:");
+            if (answer == "10") {
+                this.classList.add("hidden");
+                document.getElementById("task3").classList.remove("hidden");
+            } else {
+                alert("Wrong! Try again.");
+            }
+        });
+
+        document.addEventListener("keydown", function(event) {
+            if (event.key.toLowerCase() === "s") {
+                document.getElementById("task3").classList.add("hidden");
+                document.getElementById("finalMessage").classList.remove("hidden");
+            }
+        });
+    </script>
+
+</body>
+</html>
