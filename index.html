@@ -3,60 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fun Game for Asmita</title>
+    <title>Asmita's Special Quiz 😈</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: Comic Sans MS, cursive;
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            color: #ff0000;
             text-align: center;
-            margin: 50px;
+            padding: 20px;
         }
-        #hiddenMessage {
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 30px #000;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+        .question {
             display: none;
-            font-size: 24px;
+            margin: 20px 0;
+        }
+        .active {
+            display: block;
+        }
+        button {
+            background-color: #00ff00;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 50px;
+            margin: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            transform: scale(1.2);
+            background-color: #ff0000;
+        }
+        #movingBtn {
+            position: relative;
+            transition: 0.1s;
+        }
+        .rainbow-text {
+            animation: rainbow 2s infinite;
+        }
+        @keyframes rainbow {
+            0% {color: red;}
+            25% {color: yellow;}
+            50% {color: blue;}
+            75% {color: green;}
+            100% {color: red;}
+        }
+        #finalMessage {
+            font-size: 40px;
             font-weight: bold;
-            color: red;
+            text-transform: uppercase;
+            transform: rotate(-5deg);
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <h1 class="rainbow-text">🌟 Asmita's Very Serious Examination 🌟</h1>
+        
+        <div class="question active" id="q1">
+            <h2>Question 1: What is 1 + 1?</h2>
+            <button onclick="showMessage('Wrong! Obviously it\'s 11!', q2)">2</button>
+            <button onclick="showMessage('Wrong! Obviously it\'s 11!', q2)">3</button>
+            <button onclick="showMessage('Wrong! Obviously it\'s 11!', q2)">4</button>
+        </div>
 
-    <h2>Welcome to a Fun Challenge!</h2>
-    <p>Follow the instructions carefully to reveal the secret message.</p>
+        <div class="question" id="q2">
+            <h2>Prove you're not a robot:</h2>
+            <button id="movingBtn" onmouseover="moveButton()" onclick="showMessage('Stop clicking me!', q3)">Click me!</button>
+        </div>
 
-    <div id="mobileCheck">
-        <p>Are you using a mobile device?</p>
-        <button onclick="mobileMode(true)">Yes</button>
-        <button onclick="mobileMode(false)">No</button>
+        <div class="question" id="q3">
+            <h2>What's your favorite color?</h2>
+            <input type="color" id="colorPicker" onchange="colorChanged()">
+            <p id="colorText">You selected: <span id="selectedColor"></span></p>
+        </div>
+
+        <div class="question" id="q4">
+            <h2>Loading important questions...</h2>
+            <div id="loadingBar" style="height: 20px; background: #ddd; border-radius: 10px;">
+                <div id="progress" style="width: 0%; height: 100%; background: green; border-radius: 10px;"></div>
+            </div>
+        </div>
+
+        <div class="question" id="q5">
+            <h2>Final Agreement:</h2>
+            <label>
+                <input type="checkbox" id="agreeCheckbox" onclick="checkAgreement()">
+                I agree that Asmita is awesome
+            </label>
+        </div>
+
+        <div id="finalMessage"></div>
     </div>
 
-    <p id="instruction" style="display:none;">Press <strong>S</strong> to continue.</p>
-    <button id="mobileButton" style="display:none;" onclick="revealMessage()">Click here to continue</button>
-
-    <p id="hiddenMessage">Asmita is short! 😂</p>
-
     <script>
-        let isMobile = false;
+        let currentQuestion = 1;
+        const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
-        function mobileMode(mobile) {
-            isMobile = mobile;
-            document.getElementById("mobileCheck").style.display = "none";
-
-            if (isMobile) {
-                document.getElementById("mobileButton").style.display = "block";
-            } else {
-                document.getElementById("instruction").style.display = "block";
-                document.addEventListener("keydown", function(event) {
-                    if (event.key.toLowerCase() === "s") {
-                        revealMessage();
-                    }
-                });
+        function showMessage(msg, nextQuestion) {
+            alert(msg);
+            if(nextQuestion) {
+                document.querySelector('.active').classList.remove('active');
+                nextQuestion.classList.add('active');
+                
+                if(nextQuestion.id === 'q4') {
+                    fakeLoading();
+                }
             }
         }
 
-        function revealMessage() {
-            document.getElementById("hiddenMessage").style.display = "block";
+        function moveButton() {
+            if(!isMobile) {
+                const btn = document.getElementById('movingBtn');
+                btn.style.left = Math.random() * 300 - 150 + "px";
+                btn.style.top = Math.random() * 300 - 150 + "px";
+            }
+        }
+
+        function colorChanged() {
+            const color = document.getElementById('colorPicker').value;
+            document.getElementById('selectedColor').textContent = color;
+            document.body.style.backgroundColor = color + "50";
+            setTimeout(() => showMessage('That color is ugly!', q4), 1000);
+        }
+
+        function fakeLoading() {
+            let width = 0;
+            const interval = setInterval(() => {
+                width += Math.random() * 20;
+                document.getElementById('progress').style.width = width + "%";
+                if(width >= 100) {
+                    clearInterval(interval);
+                    showMessage('Just kidding! More questions!', q5);
+                }
+            }, 500);
+        }
+
+        function checkAgreement() {
+            const checkbox = document.getElementById('agreeCheckbox');
+            if(checkbox.checked) {
+                setTimeout(() => {
+                    checkbox.checked = false;
+                    alert("You can't agree that easily!");
+                }, 100);
+            }
+            
+            // Final message after multiple attempts
+            if(Math.random() < 0.3) {
+                document.querySelector('.active').classList.remove('active');
+                showFinalMessage();
+            }
+        }
+
+        function showFinalMessage() {
+            const finalMsg = document.getElementById('finalMessage');
+            finalMsg.innerHTML = `
+                <div class="rainbow-text">CONCLUSION:</div>
+                <div id="shortMessage" style="font-size: 60px;">ASMITA IS SHORT! 😂</div>
+                ${isMobile ? '<p>(Sent from my tall chair)</p>' : '<p>(Press F to pay respects to her height)</p>'}
+            `;
+            finalMsg.classList.add('active');
         }
     </script>
-
 </body>
 </html>
